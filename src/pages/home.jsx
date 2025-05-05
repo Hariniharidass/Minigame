@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-
+import Gamegrid from "../components/Gamegrid";
 const home = () => {
   const [dogImage, setDogImage] = useState([]);
   const [count, setCount] = useState(0);
-  const numberOfRuns = 6;
+  const numberOfRuns = 3;
 
   useEffect(() => {
     if (count < numberOfRuns) {
@@ -32,15 +32,7 @@ const home = () => {
 
   return (
     <>
-      {dogImage.map((imgUrl, index) => (
-        <img
-              key={index}
-              width={200}
-              height={200}
-              src={imgUrl}
-              alt={`Dog image ${index + 1}`}
-        />
-      ))}
+          <Gamegrid dogImageUrls={dogImage} />
     </>
   );
 };
