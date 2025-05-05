@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Gamegrid from "../components/Gamegrid";
+import Card from "../components/Card";
 const home = () => {
-  const [dogImage, setDogImage] = useState([]);
+  const [dogUrl, setDogUrl] = useState([]);
   const [count, setCount] = useState(0);
+  const [dogBreedData, setDogBreedData] = useState([]);
   const numberOfRuns = 3;
 
   useEffect(() => {
@@ -19,12 +21,28 @@ const home = () => {
     }
   }, [count]);
 
+  useEffect(() => {
+    if (dogUrl.length === numberOfRuns) {
+      const breedNames = dogUrl.map(getBreedName).filter(Boolean);
+      setDogBreedData(breedNames);
+    }
+  }, [dogUrl, numberOfRuns]);
+
+  const getBreedName = (imageUrl) => {
+    if (imageUrl) {
+      const parts = imageUrl.split("/");
+      const breedWithSubBreed = parts[4];
+      return breedWithSubBreed;
+    }
+    return null;
+  };
+
   async function fetchDogImages() {
     try {
       const response = await fetch("https://dog.ceo/api/breeds/image/random");
       const data = await response.json();
       const url = data.message;
-      setDogImage((prevUrls) => [...prevUrls, url]);
+      setDogUrl((prevUrls) => [...prevUrls, url]);
     } catch (error) {
       console.error("API fetch not successful");
     }
@@ -32,7 +50,7 @@ const home = () => {
 
   return (
     <>
-          <Gamegrid dogImageUrls={dogImage} />
+      {<Card url={dogUrl} breed={dogBreedData} />}
     </>
   );
 };
